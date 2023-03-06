@@ -7,23 +7,21 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Entity
 @Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@Entity
 public class Candidates {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private Integer id;
+
+	private String fullName;
+
+	private String email;
+
+	private String mobNo;
 
 	@ManyToOne
 	private UserDtls user;
@@ -34,8 +32,14 @@ public class Candidates {
 	@ManyToOne
 	private Jobs job;
 
-	private String resume;
+//	private String resume;
 
+	private String experience;
+
+	private String technicalSkill;
+
+	private String interviewDate;
+	
 	@Transient
 	private int jobId;
 

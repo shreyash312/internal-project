@@ -106,4 +106,32 @@ public class RecruiterServiceImpl implements RecruiterService {
 		return candidateRepo.findByRecruiterAndJob(recruiter, job);
 	}
 
+	@Override
+	public Candidates getCandidatesById(int id) {
+		Candidates can = candidateRepo.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("candidates", "id", id));
+		return can;
+	}
+
+	@Override
+	public Candidates updateCanStatus(int id, String date) {
+		Candidates can = candidateRepo.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("candidates", "id", id));
+
+		can.setInterviewDate(date);
+		return candidateRepo.save(can);
+	}
+
+	@Override
+	public UserDtls updateProfile(UserDtls user) {
+		return userRepo.save(user);
+	}
+
+	@Override
+	public List<Jobs> getAllJob() {
+		return jobRepo.findAll();
+	}
+	
+	
+
 }

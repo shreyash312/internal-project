@@ -16,4 +16,6 @@ public interface CandidateRepository extends JpaRepository<Candidates, Integer> 
 
 	public List<Candidates> findByRecruiterAndJob(UserDtls user, Jobs job);
 
+	public boolean existsByUserAndJob(UserDtls user, Jobs job);
+
 }

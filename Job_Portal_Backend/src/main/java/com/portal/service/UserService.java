@@ -4,7 +4,10 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.portal.entity.Candidates;
+import com.portal.entity.Jobs;
 import com.portal.entity.UserDtls;
 
 public interface UserService {
@@ -22,4 +25,16 @@ public interface UserService {
 	public Candidates applyJob(Candidates candidates, HttpServletRequest request);
 
 	public List<Candidates> getAppliedJob(HttpServletRequest request);
+
+	public List<Jobs> getAllJobs();
+
+	public boolean checkAppliedJob(int userId, int jobId);
+
+	public List<Jobs> searchJob(String ch);
+
+	public UserDtls updateProfile(UserDtls user);
+
+	public List<UserDtls> getAllUser();
+
+	public List<UserDtls> getAllRecruiter();
 }

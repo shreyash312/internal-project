@@ -5,7 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.batch.BatchProperties.Job;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -49,6 +49,8 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private RoleRepository roleRepo;
+
+	
 
 	public UserDtls getUserFromJwt(HttpServletRequest request) {
 		Claims claim = jwtProvider.extractClaims(request);
@@ -125,15 +127,69 @@ public class UserServiceImpl implements UserService {
 		candidates.setUser(user);
 		candidates.setJob(job);
 
-		return candidateRepo.save(candidates);
+//		if (!file.isEmpty()) {
+//			candidates.setResume(file.getOriginalFilename());
+//		}
+		Candidates can = candidateRepo.save(candidates);
+//
+//		if (can != null) {
+//			try {
+//				fileService.uploadImage(path, file);
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+//		}
+		return can;
 	}
 
 	@Override
 	public List<Candidates> getAppliedJob(HttpServletRequest request) {
 
 		UserDtls user = getUserFromJwt(request);
-
 		return candidateRepo.findByUser(user);
+	}
+
+	@Override
+	public List<Jobs> getAllJobs() {
+		return jobRepository.findAll();
+	}
+
+	@Override
+	public boolean checkAppliedJob(int userId, int jobId) {
+
+		UserDtls user = userRepo.findById(userId)
+				.orElseThrow(() -> new ResourceNotFoundException("User", "id=", userId));
+
+		Jobs job = jobRepository.findById(jobId).orElseThrow(() -> new ResourceNotFoundException("Job", "id=", jobId));
+
+		return candidateRepo.existsByUserAndJob(user, job);
+	}
+
+	@Override
+	public List<Jobs> searchJob(String ch) {
+		return jobRepository.search(ch);
+	}
+
+	@Override
+	public UserDtls updateProfile(UserDtls user) {
+		return userRepo.save(user);
+	}
+
+	@Override
+	public List<UserDtls> getAllUser() {
+
+		Role role = roleRepo.findById(102)
+				.orElseThrow(() -> new ResourceNotFoundException("Role", "invalid with id=", 102));
+
+		return userRepo.findByRole(role);
+	}
+
+	@Override
+	public List<UserDtls> getAllRecruiter() {
+		Role role = roleRepo.findById(103)
+				.orElseThrow(() -> new ResourceNotFoundException("Role", "invalid with id=", 103));
+
+		return userRepo.findByRole(role);
 	}
 
 }
